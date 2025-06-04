@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+
+
+.slick-prev {
+    left: 0 !important;
+}
+
+.slick-next {
+    right: 0 !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+    color: #d1d1d1 !important;
+}
+
+.slick-dots li button:before {
+    font-size: 10px !important;
+}

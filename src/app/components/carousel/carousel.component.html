@@ -1,0 +1,7 @@
+<swiper-container [navigation]="navigation()" autoplay="6000" speed="600" loop="true" [slidesPerView]="slidesPerView()">
+    @for (item of items(); track $index) {
+        <swiper-slide>
+            <img src="{{item.img}}" alt="Image 1">
+        </swiper-slide>
+    }
+</swiper-container>

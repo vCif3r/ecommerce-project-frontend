@@ -1,0 +1,154 @@
+<div class="container mx-auto px-4 py-8">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">Finalizar Compra</h1>
+        
+        <div class="grid gap-8 md:grid-cols-3">
+          <!-- Formulario de envío -->
+          <div class="md:col-span-2">
+            <div class="bg-white rounded-lg shadow p-6">
+              <h2 class="text-lg font-medium mb-4">Información de Envío</h2>
+              
+              <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700">Nombres</label>
+                    <input type="text" id="firstName" formControlName="firstName" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    @if (checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched) {
+                      <p class="mt-1 text-sm text-red-600">Este campo es requerido</p>
+                    }
+                  </div>
+                  
+                  <div>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700">Apellidos</label>
+                    <input type="text" id="lastName" formControlName="lastName" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  </div>
+                </div>
+                
+                <div class="mt-4">
+                  <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                  <input type="email" id="email" formControlName="email" 
+                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  @if (checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched) {
+                    <p class="mt-1 text-sm text-red-600">Ingrese un email válido</p>
+                  }
+                </div>
+                
+                <div class="mt-4">
+                  <label for="address" class="block text-sm font-medium text-gray-700">Dirección</label>
+                  <input type="text" id="address" formControlName="address" 
+                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  @if (checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched) {
+                    <p class="mt-1 text-sm text-red-600">Este campo es requerido</p>
+                  }
+                </div>
+                
+                <div class="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-3">
+                  <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700">Ciudad</label>
+                    <input type="text" id="city" formControlName="city" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  </div>
+                  
+                  <div>
+                    <label for="state" class="block text-sm font-medium text-gray-700">Región</label>
+                    <input type="text" id="state" formControlName="state" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  </div>
+                  
+                  <div>
+                    <label for="zipCode" class="block text-sm font-medium text-gray-700">Código postal</label>
+                    <input type="text" id="zipCode" formControlName="zipCode" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  </div>
+                </div>
+                
+                <div class="mt-4">
+                  <label for="phone" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                  <input type="tel" id="phone" formControlName="phone" 
+                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <h2 class="text-lg font-medium mt-8 mb-4">Método de Pago</h2>
+                
+                <div class="space-y-2">
+                  <div class="flex items-center">
+                    <input id="credit-card" name="paymentMethod" type="radio" checked 
+                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                    <label for="credit-card" class="ml-3 block text-sm font-medium text-gray-700">Tarjeta de crédito/débito</label>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <input id="paypal" name="paymentMethod" type="radio" 
+                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                    <label for="paypal" class="ml-3 block text-sm font-medium text-gray-700">PayPal</label>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <input id="cash" name="paymentMethod" type="radio" 
+                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                    <label for="cash" class="ml-3 block text-sm font-medium text-gray-700">Pago contra entrega</label>
+                  </div>
+                </div>
+                
+                <div class="mt-8">
+                  <button type="submit" [disabled]="checkoutForm.invalid || isProcessing()" 
+                          class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                    @if (isProcessing()) {
+                      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Procesando...
+                    } @else {
+                      Confirmar Pedido
+                    }
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Resumen del pedido -->
+          <div class="bg-gray-50 p-6 rounded-lg h-fit">
+            <h2 class="text-lg font-medium mb-4">Tu Pedido</h2>
+            
+            <div class="space-y-4">
+              @for (item of cartService.getItems(); track item.id) {
+                <div class="flex justify-between">
+                  <div>
+                    <span class="font-medium">{{ item.name }}</span>
+                    <span class="text-gray-600"> × {{ item.quantity }}</span>
+                  </div>
+                  <span>{{ (item.price * item.quantity) | currency:'PEN':'symbol':'1.2-2' }}</span>
+                </div>
+              }
+            </div>
+            
+            <div class="border-t mt-4 pt-4 space-y-2">
+              <div class="flex justify-between">
+                <span>Subtotal:</span>
+                <span>{{ cartService.subtotal() | currency:'PEN':'symbol':'1.2-2' }}</span>
+              </div>
+              
+              <div class="flex justify-between">
+                <span>Envío:</span>
+                <span>Gratis</span>
+              </div>
+              
+              <div class="flex justify-between font-medium text-lg mt-2">
+                <span>Total:</span>
+                <span>{{ cartService.subtotal() | currency:'PEN':'symbol':'1.2-2' }}</span>
+              </div>
+            </div>
+            
+            <div class="mt-6">
+              <a [routerLink]="['/cart']" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                ← Volver al carrito
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

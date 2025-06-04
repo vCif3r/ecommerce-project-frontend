@@ -1,0 +1,220 @@
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <!-- Top Bar -->
+    <div class="bg-indigo-600 text-white text-sm text-center py-2 px-4">
+    <p>🚚 Envío gratis en pedidos superiores a S/100 | 📦 Entrega en 24-48h</p>
+</div>
+
+    <!-- Main Navbar -->
+    <div class="w-full">
+        <div class="flex items-center justify-between container mx-auto py-3 px-4">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a [routerLink]="['/']" class="text-2xl font-bold text-indigo-600">
+                    <span class="hidden md:inline">MiTiendita</span>
+                    <span class="md:hidden">MT</span>
+                </a>
+            </div>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden md:block mx-4 flex-1 max-w-2xl">
+                <app-search-bar></app-search-bar>
+            </div>
+
+            <!-- Navigation Icons -->
+            <div class="flex items-center space-x-4 md:space-x-6">
+                <!-- User Account -->
+                <div class="relative" clickOutside (clickOutside)="userDropdownOpen.set(false)">
+                    <button (click)="userDropdownOpen.set(!userDropdownOpen())" class="flex items-center text-gray-700 hover:text-indigo-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span class=" text-sm font-medium text-gray-700">
+                            @if (authService.isAuthenticated()) {
+                                {{ authService.getUser()?.firstname }}
+                            } @else {
+                                Bienvenido
+                            }
+                        </span>
+                    </button>
+                    
+                    <!-- User Dropdown -->
+                    @if (userDropdownOpen()) {
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                            @if (authService.isAuthenticated()) {
+                                <a [routerLink]="['/profile']" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Mi cuenta
+                                </a>
+                                <!-- <a [routerLink]="['/orders']" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Mis pedidos
+                                </a> -->
+                                <a (click)="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                                    Cerrar sesión
+                                </a>
+                            } @else {
+                                <a [routerLink]="['/login']" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Iniciar sesión
+                                </a>
+                                <a [routerLink]="['/register']" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Registrarse
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <button class="p-2 text-gray-600 hover:text-indigo-600 relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <!-- <span
+                        class="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span> -->
+                </button>
+
+                <button (click)="toggleCart()" class="p-2 text-gray-600 hover:text-indigo-600 relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    @if (cartService.itemCount() > 0) {
+                    <span
+                        class="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ cartService.itemCount() }}
+                    </span>
+                    }
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button (click)="mobileMenuOpen.set(!mobileMenuOpen())"
+                    class="md:hidden p-2 text-gray-600 hover:text-indigo-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search (Hidden on desktop) -->
+        <div class="md:hidden p-3">
+            <app-search-bar></app-search-bar>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center justify-between bg-gray-100/50 px-24 py-3">
+            <div class="flex space-x-6">
+                
+                <app-category-menu/>
+                <a class="text-gray-700 hover:text-indigo-600 font-medium">Ofertas</a>
+                <a class="text-gray-700 hover:text-indigo-600 font-medium">Nuevos</a>
+            </div>
+            <div>
+                <a class="text-gray-700 hover:text-indigo-600 font-medium">Contacto</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Mobile Menu -->
+    @if (mobileMenuOpen()) {
+    <div class="md:hidden bg-white border-t">
+        <div class="px-4 py-3 space-y-2">
+            <app-category-menu/>
+            <a href="#" class="block py-2 text-gray-700 hover:text-indigo-600">Ofertas</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-indigo-600">Nuevos</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-indigo-600">Marcas</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-indigo-600">Contacto</a>
+        </div>
+    </div>
+    }
+</header>
+
+<!-- Cart Sidebar -->
+@if (cartOpen()) {
+<div class="fixed inset-0 z-50 overflow-hidden">
+    <div class="absolute inset-0 bg-gray-800 opacity-75 transition-opacity" (click)="cartOpen.set(false)"></div>
+    <div class="fixed inset-y-0 right-0 max-w-full flex">
+        <div class="w-screen max-w-md transform transition ease-in-out duration-300" [class.translate-x-0]="cartOpen()" [class.translate-x-full]="!cartOpen()">
+            <div class="h-full flex flex-col bg-white shadow-xl">
+                <div class="flex-1 overflow-y-auto">
+                    <div class="px-4 py-6 sm:px-6 bg-indigo-600 text-white">
+                        <div class="flex items-start justify-between">
+                            <h2 class="text-lg font-medium">Tu carrito ({{ cartService.itemCount() }})</h2>
+                            <button (click)="cartOpen.set(false)" class="p-1 rounded-md hover:bg-indigo-500">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-6 sm:px-6">
+                        @if (cartService.items().length > 0) {
+                        <div class="space-y-6">
+                            @for (item of cartService.items(); track item.id) {
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-shrink-0">
+                                    <img [src]="item.image" [alt]="item.name" class="h-20 w-20 rounded-md object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-sm font-medium text-gray-900">{{ item.name }}</h3>
+                                    <p class="text-sm text-gray-500">{{ item.quantity }} × ${{ item.price | number:'1.2-2' }}</p>
+                                    <div class="flex items-center mt-1">
+                                        <button (click)="cartService.updateQuantity(item.id, item.quantity - 1)" class="text-gray-500 hover:text-indigo-600 p-1">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                            </svg>
+                                        </button>
+                                        <span class="mx-2 text-sm">{{ item.quantity }}</span>
+                                        <button (click)="cartService.updateQuantity(item.id, item.quantity + 1)" class="text-gray-500 hover:text-indigo-600 p-1">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button (click)="cartService.removeItem(item.id)" class="text-red-500 hover:text-red-700">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                            }
+                        </div>
+                        } @else {
+                        <p class="text-center text-gray-500 py-8">Tu carrito está vacío</p>
+                        <div class="text-center">
+                            <a [routerLink]="['/']" (click)="cartOpen.set(false)" class="inline-block mt-4 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                                Comprar ahora
+                            </a>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                @if (cartService.items().length > 0) {
+                <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                    <div class="flex justify-between text-base font-medium text-gray-900">
+                        <p>Subtotal</p>
+                        <p>{{ cartService.subtotal() | currency:'PEN':'symbol':'1.2-2'}}</p>
+                    </div>
+                    <p class="mt-0.5 text-sm text-gray-500">Envío e impuestos calculados al finalizar</p>
+                    <div class="mt-6">
+                        <a [routerLink]="['/checkout']" (click)="cartOpen.set(false)" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                            Finalizar compra
+                        </a>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a [routerLink]="['/cart']" (click)="cartOpen.set(false)" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            Ver carrito completo
+                        </a>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}

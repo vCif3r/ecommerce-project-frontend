@@ -1,0 +1,109 @@
+<!-- category-menu.component.html -->
+<div class="relative">
+  <!-- Botón para abrir/cerrar el menú -->
+  <button
+    (click)="toggleMenu()"
+    class="flex items-center text-indigo-600 rounded-md hover:text-indigo-700 transition-colors"
+    [attr.aria-expanded]="isMenuOpen()"
+    aria-label="Categorías del menú"
+  >
+    <span>Ver Categorías</span>
+    <svg
+      class="ml-2 h-4 w-4 transition-transform duration-200"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      [class.rotate-180]="isMenuOpen()"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </button>
+
+  <!-- Menú desplegable -->
+  @if (isMenuOpen()) {
+    <div
+      class="absolute z-50 mt-2 w-64 bg-white rounded-md shadow-lg py-1 border border-gray-200"
+    >
+
+      <div class="max-h-96 overflow-y-auto">
+        <!-- Estados de carga -->
+        @if (isLoading()) {
+          <div class="p-4 flex flex-col gap-2">
+            <!-- Efecto de carga con skeletons -->
+            @for (i of [1,2,3]; track i) {
+              <div class="h-4 bg-gray-100 rounded animate-pulse" [style.width]="i === 3 ? '80%' : '100%'"></div>
+            }
+          </div>       
+        }
+    
+        @else {
+          <!-- Lista de categorías -->
+          <ul>
+            @for (category of categories(); track category.id) {
+              <li class="border-b border-gray-100 last:border-b-0">
+                <div class="flex items-center px-4 py-2 hover:bg-gray-50">
+                  <a
+                    [routerLink]="['/products/category', category.id]"
+                    class="block flex-grow text-gray-800 hover:text-indigo-600"
+                  >
+                    {{ category.name }}
+                  </a>
+                  @if (category.children?.length) {
+                    <span class="text-gray-400 text-xs">
+                      ({{ category.children?.length }})
+                    </span>
+                  }
+                </div>
+                
+                <!-- Subcategorías (recursivo) -->
+                @if (category.children?.length) {
+                  <ul>
+                    @for (child of category.children; track child.id) {
+                      <li class="border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center px-4 py-2 hover:bg-gray-50 pl-8">
+                          <a
+                            [routerLink]="['/products/category', child.id]"
+                            class="block flex-grow text-gray-800 hover:text-indigo-600"
+                          >
+                            {{ child.name }}
+                          </a>
+                          @if (child.children?.length) {
+                            <span class="text-gray-400 text-xs">
+                              ({{ child.children?.length }})
+                            </span>
+                          }
+                        </div>
+                        
+                        <!-- Sub-subcategorías (segundo nivel) -->
+                        @if (child.children?.length) {
+                          <ul>
+                            @for (subChild of child.children; track subChild.id) {
+                              <li class="border-b border-gray-100 last:border-b-0">
+                                <div class="flex items-center px-4 py-2 hover:bg-gray-50 pl-12">
+                                  <a
+                                    [routerLink]="['/products/category', subChild.id]"
+                                    class="block flex-grow text-gray-800 hover:text-indigo-600"
+                                  >
+                                    {{ subChild.name }}
+                                  </a>
+                                </div>
+                              </li>
+                            }
+                          </ul>
+                        }
+                      </li>
+                    }
+                  </ul>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  }
+</div>

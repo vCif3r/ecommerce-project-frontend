@@ -1,0 +1,21 @@
+<app-carousel [items]="carouselItems" [slidesPerView]="1" />
+
+<div class="w-[85%] m-auto py-4 space-y-6">
+    <div>
+        <app-carousel-products [products]="recientes()" title="Productos recientes"
+        [slideConfig]="slideConfigDestacados" />
+    </div>
+
+    <!-- Promo Banner -->
+    <div class="bg-indigo-500 rounded-lg p-7 md:p-6 text-white">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">Envío gratis en tu primer pedido</h2>
+            <p class="text-lg mb-6">Regístrate hoy y obtén envío gratis en tu primera compra</p>
+            <a routerLink="/register"
+                class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition">
+                Crear cuenta
+            </a>
+        </div>
+    </div>
+
+</div>

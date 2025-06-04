@@ -1,0 +1,35 @@
+<div
+  class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow"
+>
+  <!-- Imagen del producto -->
+  <a [routerLink]="['/products', product()?.id]">
+    <img
+      [src]="product()?.images?.[0]?.imageUrl"
+      [alt]="product()?.name"
+      class="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
+    />
+  </a>
+
+  <!-- Detalles del producto -->
+  <div class="p-4">
+    <h3 class="font-medium text-gray-900 mb-1">
+      <a [routerLink]="['/product', product()?.id]">{{ product()?.name }}</a>
+    </h3>
+    <div class="flex items-center justify-between">
+      <div>
+        <!-- @if (product.discount) {
+              <span class="text-gray-500 line-through mr-2">${{ product.originalPrice }}</span>
+            } -->
+        <span class="font-semibold text-indigo-600">{{ product()?.price | currency:'PEN':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Botón para agregar al carrito -->
+    <button
+      (click)="addToCart()"
+      class="mt-4 w-full bg-indigo-500 text-white py-2 px-4 rounded-3xl hover:bg-indigo-400 transition cursor-pointer"
+    >
+      Agregar al carrito
+    </button>
+  </div>
+</div>
